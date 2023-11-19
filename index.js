@@ -1,5 +1,7 @@
 const { ApolloServer } = require("@apollo/server");
 const { startStandaloneServer } = require("@apollo/server/standalone");
+const { v1: uuid } = require("uuid");
+
 
 let authors = [
   {
@@ -104,7 +106,7 @@ type Book {
   }
   type Author {
     name: String!
-    bookCount: Int!
+    bookCount: Int
     id: ID!
     born: Int
   }
@@ -114,19 +116,31 @@ type Query {
     authorCount: Int!
     allAuthors: [Author!]!
   }
+  type Mutation {
+    addBook(
+      title: String!
+      published: Int
+      author: String!
+      genres: [String!]!
+    ): Book
+    addAuthor(
+      name: String!
+    ): Author
+  }
 `;
 
 const resolvers = {
   Query: {
+   
     bookCount: () => books.length,
     allBooks: (root, args) => {
       if (args.author) {
         return books.filter((book) => book.author === args.author);
-      } else if (args.genres) {
+      } 
+      if (args.genres) {
         return books.filter((book) => book.genres.every((genre) => book.genres.includes(genre)));
-      } else {
-        return books;
-      }
+      } 
+     return books;
     },
     authorCount: () => authors.length,
     allAuthors: () => {
@@ -136,6 +150,21 @@ const resolvers = {
       }));
     },
   },
+  Mutation: {
+    addBook: (root, args) => {
+        let author = authors.find((author) => author.name === args.author);
+    
+        if (!author) {
+          author = { name: args.author, id: uuid() };
+          authors.push(author);
+        }
+    
+        const book = { ...args, id: uuid() };
+        books.push(book);
+    
+        return book; 
+      },
+  }
 };
 
 const server = new ApolloServer({
