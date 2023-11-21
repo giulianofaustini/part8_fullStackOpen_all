@@ -1,9 +1,9 @@
-const Books = (props) => {
-  if (!props.show) {
+const Books = ({ books , show }) => {
+  if (!show || !books) {
     return null
   }
 
-  const books = []
+  console.log('from books page to say books', books)
 
   return (
     <div>
