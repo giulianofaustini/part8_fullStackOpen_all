@@ -1,8 +1,13 @@
-const Authors = (props) => {
-  if (!props.show) {
+
+
+const Authors = ({ authors, show }) => {
+  if (!show || !authors) {
     return null
   }
-  const authors = []
+
+  console.log('from authors page to say authors', authors)
+
+
 
   return (
     <div>
