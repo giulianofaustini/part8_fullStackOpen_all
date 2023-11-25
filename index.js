@@ -1,3 +1,4 @@
+require("dotenv").config();
 const { ApolloServer } = require("@apollo/server");
 const { startStandaloneServer } = require("@apollo/server/standalone");
 const { v1: uuid } = require("uuid");
@@ -6,7 +7,8 @@ mongoose.set('strictQuery', false);
 
 const Author = require("./models/Author");
 const Book = require("./models/Book");
-require("dotenv").config();
+const { GraphQLError } = require("graphql");
+
 const MONGODB_URI = process.env.MONGODB_URI;
 
 console.log('connecting to', MONGODB_URI)
@@ -155,13 +157,15 @@ const resolvers = {
     bookCount: async () => Book.collection.countDocuments(),
     allBooks: async (root, args ) => {
       if (args.author) {
-        return Book.find({ author: args.author });
+        const author =  await Author.findOne({ name: args.author });
+        if (author) {
+          return Book.find({ author: author.id });
+        }
       } 
       if (args.genres) {
         return Book.find({ genres: { $in: args.genres } });
       }
       return Book.find({});
- 
     },
     authorCount: async () => Author.collection.countDocuments(),
     allAuthors: async (root, args) => {
@@ -169,30 +173,63 @@ const resolvers = {
     },
   },
   Mutation: {
-    addBook: (root, args) => {
-        let author = authors.find((author) => author.name === args.author);
-    
-        if (!author) {
-          author = { name: args.author, id: uuid() };
-          authors.push(author);
-        }
-    
-        const book = { ...args, id: uuid() };
-        books.push(book);
-    
-        return book; 
-      },
-      editAuthor: (root, args) => {
-        const author = authors.find((author) => author.name === args.name)
-        if(!author) {
-          return null
-        }
-        const updatedAuthor = {...author, born: args.setBornTo}
-        authors = authors.map((author) => author.name === args.name ? updatedAuthor : author)
-        return updatedAuthor
+    addAuthor: async (root, args) => {
+      const author = new Author({...args})
+      try {
+        await author.save();
+      } catch (error) {
+        throw new GraphQLError('Author failed to save', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args
+          }
+        });
       }
-  }
- 
+      return author;
+    },
+    addBook: async (root, args) => {
+      let author = await Author.findOne({ name: args.author });
+      if (!author) {
+        author = new Author({ name: args.author });
+        await author.save();
+      }
+
+      try {
+        const book = new Book({ ...args, author: author.id });
+        await book.save();
+        return book;
+      } catch (error) {
+        throw new GraphQLError('Book failed to save', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args
+          }
+        });
+      }
+    },
+    editAuthor: async (root, args) => {
+      const author = await Author.findOne({ name: args.name });
+
+      if (!author) {
+        return null;
+      }
+
+      try {
+        author.born = args.setBornTo;
+        await author.save();
+      } catch (error) {
+        throw new GraphQLError('Saving author failed', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.name,
+            error
+          },
+        });
+      }
+
+      return author;
+    },
+  },
 };
 
 const server = new ApolloServer({
