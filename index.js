@@ -116,7 +116,7 @@ const typeDefs = `
 type Book {
     title: String!
     published: Int
-    author: String!
+    author: Author!
     id: ID!
     genres: [String!]!
   }
@@ -138,7 +138,7 @@ type Query {
       published: Int
       author: String!
       genres: [String!]!
-    ): Book
+    ): Book!
     addAuthor(
       name: String!
     ): Author
@@ -152,22 +152,20 @@ type Query {
 const resolvers = {
   Query: {
    
-    bookCount: () => books.length,
-    allBooks: (root, args) => {
+    bookCount: async () => Book.collection.countDocuments(),
+    allBooks: async (root, args ) => {
       if (args.author) {
-        return books.filter((book) => book.author === args.author);
+        return Book.find({ author: args.author });
       } 
       if (args.genres) {
-        return books.filter((book) => book.genres.every((genre) => book.genres.includes(genre)));
-      } 
-     return books;
+        return Book.find({ genres: { $in: args.genres } });
+      }
+      return Book.find({});
+ 
     },
-    authorCount: () => authors.length,
-    allAuthors: () => {
-      return authors.map((author) => ({
-        ...author,
-        bookCount: books.filter((book) => book.author === author.name).length,
-      }));
+    authorCount: async () => Author.collection.countDocuments(),
+    allAuthors: async (root, args) => {
+     return Author.find({});
     },
   },
   Mutation: {
