@@ -174,24 +174,70 @@ const resolvers = {
   },
   Mutation: {
     addAuthor: async (root, args) => {
-      const author = new Author({...args})
-      try {
-        await author.save();
-      } catch (error) {
-        throw new GraphQLError('Author failed to save', {
+      if (args.name.length < 3) {
+        throw new GraphQLError('Author name must be at least 3 characters long', {
           extensions: {
             code: 'BAD_USER_INPUT',
-            invalidArgs: args
-          }
+            invalidArgs: args,
+          },
         });
       }
-      return author;
+  
+      const author = new Author({ ...args });
+      try {
+        await author.save();
+        return author;
+      } catch (error) {
+        if (error.name === 'ValidationError') {
+          throw new GraphQLError('Author validation failed', {
+            extensions: {
+              code: 'BAD_USER_INPUT',
+              invalidArgs: args,
+              validationErrors: error.errors,
+            },
+          });
+        } else {
+          throw new GraphQLError('Author failed to save', {
+            extensions: {
+              code: 'INTERNAL_SERVER_ERROR',
+              error: error.message,
+            },
+          });
+        }
+      }
     },
     addBook: async (root, args) => {
+if(args.title.length < 3) {
+  throw new GraphQLError('Book title must be at least 2 characters long', { 
+    extensions: {
+      code: 'BAD_USER_INPUT',
+      invalidArgs: args,
+    },
+  })
+}
       let author = await Author.findOne({ name: args.author });
       if (!author) {
         author = new Author({ name: args.author });
-        await author.save();
+        try {
+          await author.save();
+        } catch (error) {
+          if (error.name === 'ValidationError') {
+            throw new GraphQLError('Author validation failed', {
+              extensions: {
+                code: 'BAD_USER_INPUT',
+                invalidArgs: args,
+                validationErrors: error.errors,
+              },
+            });
+          } else {
+            throw new GraphQLError('Author failed to save', {
+              extensions: {
+                code: 'INTERNAL_SERVER_ERROR',
+                error: error.message,
+              },
+            });
+          }
+        }
       }
 
       try {
@@ -199,38 +245,57 @@ const resolvers = {
         await book.save();
         return book;
       } catch (error) {
-        throw new GraphQLError('Book failed to save', {
-          extensions: {
-            code: 'BAD_USER_INPUT',
-            invalidArgs: args
-          }
-        });
+        if (error.name === 'ValidationError') {
+          throw new GraphQLError('Book validation failed', {
+            extensions: {
+              code: 'BAD_USER_INPUT',
+              invalidArgs: args,
+              validationErrors: error.errors,
+            },
+          });
+        } else {
+          throw new GraphQLError('Book failed to save', {
+            extensions: {
+              code: 'INTERNAL_SERVER_ERROR',
+              error: error.message,
+            },
+          });
+        }
       }
     },
+
     editAuthor: async (root, args) => {
       const author = await Author.findOne({ name: args.name });
-
+  
       if (!author) {
         return null;
       }
-
+  
       try {
         author.born = args.setBornTo;
         await author.save();
+        return author;
       } catch (error) {
-        throw new GraphQLError('Saving author failed', {
-          extensions: {
-            code: 'BAD_USER_INPUT',
-            invalidArgs: args.name,
-            error
-          },
-        });
+        if (error.name === 'ValidationError') {
+          throw new GraphQLError('Author validation failed', {
+            extensions: {
+              code: 'BAD_USER_INPUT',
+              invalidArgs: args,
+              validationErrors: error.errors,
+            },
+          });
+        } else {
+          throw new GraphQLError('Saving author failed', {
+            extensions: {
+              code: 'INTERNAL_SERVER_ERROR',
+              error: error.message,
+            },
+          });
+        }
       }
-
-      return author;
     },
-  },
-};
+}
+}
 
 const server = new ApolloServer({
   typeDefs,
