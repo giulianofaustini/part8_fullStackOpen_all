@@ -8,20 +8,39 @@ import { ALL_AUTHORS } from './queries'
 import { useQuery } from '@apollo/client'
 
 const App = () => {
-  const [page, setPage] = useState('authors')
-
-  const resultBooks = useQuery(ALL_BOOKS)
-  const resultAuthors = useQuery(ALL_AUTHORS)
   
 
+  const resultBooks = useQuery(ALL_BOOKS, {
+    onError: (error) => {
+      console.error('Error fetching books:', error.message);
+    },
+  });
 
+  const resultAuthors = useQuery(ALL_AUTHORS, {
+    onError: (error) => {
+      console.error('Error fetching authors:', error.message);
+    },
+  });
+
+  const [page, setPage] = useState('authors')
+  
   if (resultBooks.loading)  {
     return <div>loading...</div>
   }
+  
 
   if(resultAuthors.loading) {
     return <div>loading...</div>
   } 
+
+
+
+  console.log('this is the all books result: ',resultBooks.data)  
+  console.log(resultAuthors)
+
+
+  const allBooks = resultBooks.data ? resultBooks.data.allBooks : [];
+  
 
   return (
     <div>
@@ -30,12 +49,13 @@ const App = () => {
         <button onClick={() => setPage('books')}>books</button>
         <button onClick={() => setPage('add')}>add book</button>
       </div>
-
-      <Authors authors={resultAuthors.data.allAuthors} show={page === 'authors'} />
-
-      <Books books={resultBooks.data.allBooks} show={page === 'books'} />
-
-      <NewBook show={page === 'add'} />
+      {!resultBooks.loading && !resultAuthors.loading && (
+        <div>
+          <Authors authors={resultAuthors.data.allAuthors} show={page === 'authors'} />
+          <Books books={allBooks} show={page === 'books'} />
+          <NewBook show={page === 'add'} />
+        </div>
+      )}
     </div>
   )
 }

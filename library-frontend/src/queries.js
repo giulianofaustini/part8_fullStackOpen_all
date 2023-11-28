@@ -5,7 +5,11 @@ export const ALL_BOOKS = gql`
     allBooks {
       title
       published
-      author
+      author {
+        name
+        born
+        id
+      }
       id
       genres
     }
@@ -51,3 +55,4 @@ mutation editAuthor($name: String!, $born: Int! ) {
     }
 }
 `
+

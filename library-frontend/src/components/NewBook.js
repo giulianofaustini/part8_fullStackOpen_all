@@ -17,24 +17,23 @@ const NewBook = (props) => {
 
  
 
-  const submit = (event) => {
-    event.preventDefault()
-
+  const submit = async (event) => {
+    event.preventDefault();
+  
     const publishedNumber = parseInt(published, 10);
-
-
-   createBook({ variables: { title, author, published: publishedNumber , genres }})
-
-   console.log( 'This is from NewBook form in the submit to show the results frmo the submit form', createBook)
-
-    console.log('add book...')
-
-    setTitle('')
-    setPublished('')
-    setAuthor('')
-    setGenres([])
-    setGenre('')
-  }
+  
+    try {
+      await createBook({ variables: { title, author, published: publishedNumber, genres } });
+    } catch (error) {
+      console.error('Error adding book:', error.message);
+    }
+  
+    setTitle('');
+    setPublished('');
+    setAuthor('');
+    setGenres([]);
+    setGenre('');
+  };
 
   const addGenre = () => {
     setGenres(genres.concat(genre))

@@ -182,16 +182,18 @@ const resolvers = {
     bookCount: async () => Book.collection.countDocuments(),
 
     allBooks: async (root, args) => {
+      console.log("root in allbooks in index.js backend: ", root);
+      console.log("args in allbooks in index.js backend: ", args);
       if (args.author) {
         const author = await Author.findOne({ name: args.author });
         if (author) {
-          return Book.find({ author: author.id });
+          return Book.find({ author: author.id }).populate("author");
         }
       }
       if (args.genres) {
-        return Book.find({ genres: { $in: args.genres } });
+        return Book.find({ genres: { $in: args.genres } }).populate("author");
       }
-      return Book.find({});
+      return Book.find({}).populate("author");
     },
 
     authorCount: async () => {
