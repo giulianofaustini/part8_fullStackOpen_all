@@ -7,6 +7,7 @@ export const NavBar = () => {
       <Link to={"/"}>Author</Link>
       <Link to={"/Books"}>Books</Link>
       <Link to={"/Add_Books"}>Add Books</Link>
+      <Link to={"/Recommended"}>Recommended</Link>
     </div>
   );
 };

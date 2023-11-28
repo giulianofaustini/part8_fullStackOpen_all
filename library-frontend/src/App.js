@@ -9,6 +9,7 @@ import { NavBar } from "./components/NavBar";
 import { ALL_BOOKS } from './queries'
 import { ALL_AUTHORS } from './queries'
 import { useQuery , useApolloClient} from '@apollo/client'
+import { Recommended } from './components/Recommended';
 
 const App = () => {
   
@@ -74,6 +75,8 @@ const App = () => {
             <Route path="/" element={<Authors authors={resultAuthors.data.allAuthors} />} />
             <Route path="/Books" element={<Books books={allBooks} />} />
             <Route path="/Add_Books" element={<NewBook  />} />
+            <Route path="/Recommended" element={<Recommended  books={allBooks} />} />
+
           </Routes>
         )}
       </Router>
