@@ -354,7 +354,9 @@ const resolvers = {
           });
         }
         await book.save();
-        return book;
+        const populatedBook = await Book.findById(book.id).populate('author');
+
+        return populatedBook;
       } catch (error) {
         if (error.name === "ValidationError") {
           throw new GraphQLError("Book validation failed", {
@@ -431,3 +433,5 @@ startStandaloneServer(server, {
 }).then(({ url }) => {
   console.log(`Server ready at ${url}`);
 });
+
+

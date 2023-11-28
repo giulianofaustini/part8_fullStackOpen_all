@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/client'
 import { CREATE_BOOK, ALL_BOOKS, ALL_AUTHORS } from '../queries'
 
 
-const NewBook = (props) => {
+export const NewBook = (props) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [published, setPublished] = useState('')
@@ -23,7 +23,19 @@ const NewBook = (props) => {
     const publishedNumber = parseInt(published, 10);
   
     try {
-      await createBook({ variables: { title, author, published: publishedNumber, genres } });
+      const { data } = await createBook({
+        variables: {
+          title,
+          author,
+          published: publishedNumber,
+          genres,
+        },
+      });
+  
+      const newBook = data.addBook;
+  
+     
+      props.updateCacheWith(newBook);
     } catch (error) {
       console.error('Error adding book:', error.message);
     }
@@ -34,6 +46,7 @@ const NewBook = (props) => {
     setGenres([]);
     setGenre('');
   };
+  
 
   const addGenre = () => {
     setGenres(genres.concat(genre))
@@ -84,6 +97,3 @@ const NewBook = (props) => {
     </div>
   )
 }
-
-export default NewBook
-
