@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useState } from "react";
 import Authors from './components/Authors'
 import Books from './components/Books'
 import {NewBook} from './components/NewBook'
 import { LoginForm } from './components/LoginForm'
+import { NavBar } from "./components/NavBar";
 
 import { ALL_BOOKS } from './queries'
 import { ALL_AUTHORS } from './queries'
@@ -22,8 +24,6 @@ const App = () => {
       console.error('Error fetching authors:', error.message);
     },
   });
-
-  const [page, setPage] = useState('authors')
   const [token, setToken] = useState(null)
   const client = useApolloClient()
 
@@ -34,18 +34,6 @@ const App = () => {
   }
 
 
-
-  if (!token) {
-    return (
-      <div>
-        <h2>Login</h2>
-        <LoginForm
-          setToken={setToken}
-        />
-      </div>
-    )
-  }
-  
   if (resultBooks.loading)  {
     return <div>loading...</div>
   }
@@ -64,23 +52,34 @@ const App = () => {
   const allBooks = resultBooks.data ? resultBooks.data.allBooks : [];
   
 
+  if (!token) {
+    return (
+      <div>
+        <h2>Login</h2>
+        <LoginForm
+          setToken={setToken}
+        />
+      </div>
+    )
+  }
+  
+
   return (
     <div>
-      <div>
-        <button onClick={() => setPage('authors')}>authors</button>
-        <button onClick={() => setPage('books')}>books</button>
-        <button onClick={() => setPage('add')}>add book</button>
-      </div>
-      {!resultBooks.loading && !resultAuthors.loading && (
-        <div>
-          <button onClick={logout}>logout</button>
-          <Authors authors={resultAuthors.data.allAuthors} show={page === 'authors'} />
-          <Books books={allBooks} show={page === 'books'} />
-          <NewBook show={page === 'add'} />
-        </div>
-      )}
+      <Router>
+        <NavBar />
+        <button onClick={logout}>logout</button>
+        {resultAuthors.data && resultAuthors.data.allAuthors && (
+          <Routes>
+            <Route path="/" element={<Authors authors={resultAuthors.data.allAuthors} />} />
+            <Route path="/Books" element={<Books books={allBooks} />} />
+            <Route path="/Add_Books" element={<NewBook  />} />
+          </Routes>
+        )}
+      </Router>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
+

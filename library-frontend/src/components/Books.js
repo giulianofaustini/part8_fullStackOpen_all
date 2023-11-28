@@ -1,7 +1,5 @@
-const Books = ({ books , show }) => {
-  if (!show || !books) {
-    return null
-  }
+const Books = ({ books }) => {
+  
 
   console.log('from books page to say books', books)
 

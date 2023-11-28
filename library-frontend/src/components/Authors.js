@@ -3,17 +3,13 @@ import { EDIT_AUTHOR, ALL_AUTHORS } from "../queries";
 import { useMutation } from "@apollo/client";
 import Select from "react-select";
 
-const Authors = ({ authors, show }) => {
+const Authors = ({ authors }) => {
   const [selectedAuthor, setSelectedAuthor] = useState(null);
   const [born, setBorn] = useState("");
 
   const [editAuthor] = useMutation(EDIT_AUTHOR, {
     refetchQueries: [{ query: ALL_AUTHORS }],
   });
-
-  if (!show || !authors) {
-    return null;
-  }
 
   const options = authors.map((a)=> ({ value: a.name, label: a.name }))
 

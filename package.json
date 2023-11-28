@@ -9,6 +9,7 @@
   "author": "Giuliano",
   "license": "ISC",
   "dependencies": {
+    "@apollo/client": "^3.8.7",
     "@apollo/server": "^4.9.5",
     "apollo-link-context": "^1.0.20",
     "cookie": "^0.6.0",

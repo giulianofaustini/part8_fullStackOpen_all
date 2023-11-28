@@ -53,10 +53,6 @@ export const NewBook = (props) => {
     setGenre('')
   }
 
-  if (!props.show) {
-    return null
-  }
-
   return (
     <div>
       <form onSubmit={submit}>
