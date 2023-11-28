@@ -1,5 +1,5 @@
-
 import React, { useState } from 'react';
+
 
 const Books = ({ books }) => {
   const [selectedGenre, setSelectedGenre] = useState(null);
@@ -16,9 +16,10 @@ const Books = ({ books }) => {
     setSelectedGenre(genre);
   };
 
-  const filteredBooks = selectedGenre
-    ? books.filter((b) => b.genres.includes(selectedGenre))
-    : books;
+
+
+  const filteredBooks = selectedGenre ? books.filter((b) => b.genres.includes(selectedGenre)) : books;
+
 
   return (
     <div>
@@ -30,7 +31,7 @@ const Books = ({ books }) => {
           </button>
         ))}
         <div>
-        <button onClick={() => setSelectedGenre(null)}>Show All</button>
+          <button onClick={() => setSelectedGenre(null)}>Show All</button>
         </div>
       </div>
 
@@ -46,3 +47,4 @@ const Books = ({ books }) => {
 };
 
 export default Books;
+

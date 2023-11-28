@@ -146,6 +146,7 @@ type Query {
     allBooks(author: String, genres: [String]): [Book!]!
     authorCount: Int!
     allAuthors: [Author!]!
+    booksInGenre(genres: [String]): [Book!]!
     me: User
   }
   type Mutation {
@@ -180,6 +181,13 @@ type Query {
 const resolvers = {
   Query: {
     bookCount: async () => Book.collection.countDocuments(),
+
+    booksInGenre: async (root, args) => {
+      if(args.genres) {
+        const books = await Book.find({ genres: { $in: args.genres } }).populate("author"); 
+        return books;
+      }
+    },
 
     allBooks: async (root, args) => {
       console.log("root in allbooks in index.js backend: ", root);

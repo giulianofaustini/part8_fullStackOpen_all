@@ -1,39 +1,31 @@
-import React from 'react'
-import { USER } from '../queries'
-import { useQuery } from '@apollo/client'
+import React from 'react';
+import { USER, BOOKS_IN_GENRE } from '../queries';
+import { useQuery } from '@apollo/client';
 
 export const Recommended = ({ books }) => {
-
-const user = useQuery(USER, {
+  const userQuery = useQuery(USER, {
     onError: (error) => {
       console.error('Error fetching user:', error.message);
     },
-})
+  });
 
-console.log('This is the books from recommended: ',books)
+  const favoriteGenre = userQuery.data && userQuery.data.me.favoriteGenre;
 
-if (user.loading)  {
-    return <div>loading...</div>
-  }
-  
+  const booksInGenreQuery = useQuery(BOOKS_IN_GENRE, {
+    onError: (error) => {
+      console.error('Error fetching books in genre:', error.message);
+    },
+    variables: { genre: favoriteGenre },
+  });
 
-console.log('This is the user from recommended: ',user)
+  const booksInFavoriteGenre = booksInGenreQuery.data && booksInGenreQuery.data.allBooks.map((book) => ( <li key={book.title}>{book.title}</li> ));
 
-const favoriteGenre = user.data.me.favoriteGenre
-
-console.log('This is the favorite genre: ',favoriteGenre)   
-
-const booksInFavoriteGenre = books.filter(book => book.genres.includes(favoriteGenre)).map(book => <li key={book.title}>{book.title} </li>)
-
-console.log('These are book suggestions in recommended as for favorite genre: ', booksInFavoriteGenre)   
   return (
     <div>
-        <h1>Your fav genre: { favoriteGenre} </h1>
-        <h3>Books in your favorite genre:</h3>
-        { booksInFavoriteGenre }
-
-
-
+      <h1>Your fav genre: {favoriteGenre}</h1>
+      <h3>Books in your favorite genre:</h3>
+      {booksInFavoriteGenre} by {booksInGenreQuery.data && booksInGenreQuery.data.allBooks[0].author.name}
     </div>
-  )
-}
+  );
+};
+
