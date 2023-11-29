@@ -121,7 +121,7 @@ export const NewBook = (props) => {
   }
 
   return (
-    <div>
+    <div >
       <form onSubmit={submit}>
         <div>
           title

@@ -43,7 +43,7 @@ export const LoginForm = ({ setToken }) => {
         <div>
           <div>
             <input
-            placeholder="username"
+            placeholder="Julian or Noora"
               type="text"
               value={username}
               onChange={({ target }) => setUsername(target.value)}
@@ -51,7 +51,7 @@ export const LoginForm = ({ setToken }) => {
           </div>
           <div>
             <input
-            placeholder="password"
+            placeholder="secret"
               type="password"
               value={password}
               onChange={({ target }) => setPassword(target.value)}

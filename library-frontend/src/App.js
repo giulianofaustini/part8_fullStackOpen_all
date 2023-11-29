@@ -5,12 +5,12 @@ import Books from './components/Books'
 import {NewBook} from './components/NewBook'
 import { LoginForm } from './components/LoginForm'
 import { NavBar } from "./components/NavBar";
+import './index.css'
 
 import { ALL_BOOKS, BOOK_ADDED } from './queries'
 import { ALL_AUTHORS } from './queries'
 import { useQuery , useApolloClient , useSubscription } from '@apollo/client'
 import { Recommended } from './components/Recommended';
-
 
 
 export const updateCache = (cache, query, addedBook) => {
@@ -97,7 +97,7 @@ const App = () => {
   
 
   return (
-    <div>
+    <div className="md:container md:mx-auto">
       <Router>
         <NavBar />
         <button onClick={logout}>logout</button>
