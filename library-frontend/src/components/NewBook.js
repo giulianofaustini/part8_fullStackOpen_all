@@ -12,39 +12,66 @@ export const NewBook = (props) => {
 
   
  
-    const [createBook] = useMutation(CREATE_BOOK, {
-      update: (cache, { data: { addBook } }) => {
-        const allBooksData = cache.readQuery({ query: ALL_BOOKS });
-        cache.writeQuery({
-          query: ALL_BOOKS,
-          data: {
-            allBooks: [...allBooksData.allBooks, addBook],
-          },
-        });
-        const allAuthorsData = cache.readQuery({ query: ALL_AUTHORS });
-        const newAuthor = addBook.author;
-        const authorExists = allAuthorsData.allAuthors.some(
-          (author) => author.id === newAuthor.id
-        );
+  const [createBook] = useMutation(CREATE_BOOK, {
+    update: (cache, response) => {
+
+      cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
+        return {
+          allBooks: allBooks.concat(response.data.addBook),
+        };
+      });
+      cache.updateQuery({ query: ALL_AUTHORS }, ({ allAuthors }) => {
+        return {
+          allAuthors: allAuthors.concat(response.data.addBook.author),
+        };
+      });
+    },
+    onError: (error) => {
+      console.error('Error adding book:', error.message);
+    },
+  });
+
+
+
+
+
+
+    //   update: (cache, { data: { addBook } }) => {
+    //     const allBooksData = cache.readQuery({ query: ALL_BOOKS });
+    //     cache.writeQuery({
+    //       query: ALL_BOOKS,
+    //       data: {
+    //         allBooks: [...allBooksData.allBooks, addBook],
+    //       },
+    //     });
+    //     const allAuthorsData = cache.readQuery({ query: ALL_AUTHORS });
+    //     const newAuthor = addBook.author;
+    //     const authorExists = allAuthorsData.allAuthors.some(
+    //       (author) => author.id === newAuthor.id
+    //     );
     
-        if (!authorExists) {
-          cache.writeQuery({
-            query: ALL_AUTHORS,
-            data: {
-              allAuthors: [...allAuthorsData.allAuthors, newAuthor],
-            },
-          });
-        }
-      },
-    });
+    //     if (!authorExists) {
+    //       cache.writeQuery({
+    //         query: ALL_AUTHORS,
+    //         data: {
+    //           allAuthors: [...allAuthorsData.allAuthors, newAuthor],
+    //         },
+    //       });
+    //     }
+    //   },
+    // });
   
+
+ // refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
+ 
+
   const submit = async (event) => {
     event.preventDefault();
   
     const publishedNumber = parseInt(published, 10);
   
     try {
-      const { data } = await createBook({
+      await createBook({
         variables: {
           title,
           author,
@@ -52,14 +79,15 @@ export const NewBook = (props) => {
           genres,
         },
       });
-  
-      const newBook = data.addBook;
-  
-     
-      props.updateCacheWith(newBook);
     } catch (error) {
       console.error('Error adding book:', error.message);
     }
+  
+      // const newBook = data.addBook;
+  
+     
+      // props.updateCacheWith(newBook);
+    
   
     setTitle('');
     setPublished('');

@@ -74,7 +74,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Authors authors={resultAuthors.data.allAuthors} />} />
             <Route path="/Books" element={<Books books={allBooks} />} />
-            <Route path="/Add_Books" element={<NewBook  />} />
+            <Route path="/Add_Books" element={<NewBook />} />
             <Route path="/Recommended" element={<Recommended  books={allBooks} />} />
 
           </Routes>
