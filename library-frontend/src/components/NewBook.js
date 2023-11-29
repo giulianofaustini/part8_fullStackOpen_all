@@ -17,12 +17,17 @@ export const NewBook = (props) => {
     onError: (error) => {
       console.error('Error adding book:', error.message);
     },
-    update: (cache, { data: { addBook } }) => {
-      updateCache(cache, { query: ALL_AUTHORS }, addBook);
-      updateCache(cache, { query: ALL_BOOKS }, addBook);
+    update: (cache, { data }) => {
+      console.log('data in the create book use mutatino in new book',data);
+      if (data && data.addBook) {
+        updateCache(cache, { query: ALL_AUTHORS }, data.addBook);
+        updateCache(cache, { query: ALL_BOOKS }, data.addBook);
+      }
     },
-     refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
+  
   });
+    //  refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
+
 
  
   // const [createBook] = useMutation(CREATE_BOOK, {

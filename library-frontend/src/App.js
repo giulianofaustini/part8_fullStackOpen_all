@@ -14,22 +14,24 @@ import { Recommended } from './components/Recommended';
 
 
 export const updateCache = (cache, query, addedBook) => {
-  // helper that is used to eliminate saving same person twice
+  // helper that is used to eliminate saving the same book twice
   const uniqByName = (a) => {
-    let seen = new Set()
+    let seen = new Set();
     return a.filter((item) => {
-      let k = item.name
-      return seen.has(k) ? false : seen.add(k)
-    })
-  }
+      let k = item.title;
+      return seen.has(k) ? false : seen.add(k);
+    });
+  };
 
   cache.updateQuery(query, ({ allBooks }) => {
+    // Ensure allBooks is defined before concatenating
+    const updatedBooks = allBooks ? uniqByName(allBooks.concat(addedBook)) : [addedBook];
+    
     return {
-      allBooks: uniqByName(allBooks.concat(addedBook)),
-    }
-  })
-}
-
+      allBooks: updatedBooks,
+    };
+  });
+};
 
 
 const App = () => {
