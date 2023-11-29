@@ -59,12 +59,7 @@ const App = () => {
   const [token, setToken] = useState(null)
   const client = useApolloClient()
 
-  const logout = () => {
-    setToken(null)
-    localStorage.clear()
-    client.resetStore()
-  }
-
+  
 
   if (resultBooks.loading)  {
     return <div>loading...</div>
@@ -97,10 +92,13 @@ const App = () => {
   
 
   return (
-    <div className="md:container md:mx-auto">
+    <div className="md:container md:mx-auto font-mono">
       <Router>
-        <NavBar />
-        <button onClick={logout}>logout</button>
+        <NavBar setToken={setToken} />
+        <div className='flex bg-white'>
+        
+        </div>
+        
         {resultAuthors.data && resultAuthors.data.allAuthors && (
           <Routes>
             <Route path="/" element={<Authors authors={resultAuthors.data.allAuthors} />} />
