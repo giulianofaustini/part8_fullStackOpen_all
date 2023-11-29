@@ -9,6 +9,11 @@ mutation login ($username: String!, $password: String!) {
 `
 
 export const BOOK_ADDED = gql`
+subscription {
+    bookAdded {
+        ...BookDetails
+    }
+}
 fragment BookDetails on Book {
     title
     published

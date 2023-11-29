@@ -6,13 +6,42 @@ import {NewBook} from './components/NewBook'
 import { LoginForm } from './components/LoginForm'
 import { NavBar } from "./components/NavBar";
 
-import { ALL_BOOKS } from './queries'
+import { ALL_BOOKS, BOOK_ADDED } from './queries'
 import { ALL_AUTHORS } from './queries'
-import { useQuery , useApolloClient} from '@apollo/client'
+import { useQuery , useApolloClient , useSubscription } from '@apollo/client'
 import { Recommended } from './components/Recommended';
 
+
+
+export const updateCache = (cache, query, addedBook) => {
+  // helper that is used to eliminate saving same person twice
+  const uniqByName = (a) => {
+    let seen = new Set()
+    return a.filter((item) => {
+      let k = item.name
+      return seen.has(k) ? false : seen.add(k)
+    })
+  }
+
+  cache.updateQuery(query, ({ allBooks }) => {
+    return {
+      allBooks: uniqByName(allBooks.concat(addedBook)),
+    }
+  })
+}
+
+
+
 const App = () => {
-  
+
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      const addedBook = subscriptionData.data.bookAdded;
+      console.log(addedBook);
+      window.alert(`New book added: ${addedBook.title}`);
+      updateCache(client.cache, { query: ALL_BOOKS }, addedBook);
+    },
+  });
 
   const resultBooks = useQuery(ALL_BOOKS, {
     onError: (error) => {

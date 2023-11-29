@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useMutation } from '@apollo/client'
 import { CREATE_BOOK, ALL_BOOKS, ALL_AUTHORS } from '../queries'
+import { updateCache } from '../App'
 
 
 export const NewBook = (props) => {
@@ -11,25 +12,37 @@ export const NewBook = (props) => {
   const [genres, setGenres] = useState([])
 
   
- 
-  const [createBook] = useMutation(CREATE_BOOK, {
-    update: (cache, response) => {
 
-      cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
-        return {
-          allBooks: allBooks.concat(response.data.addBook),
-        };
-      });
-      cache.updateQuery({ query: ALL_AUTHORS }, ({ allAuthors }) => {
-        return {
-          allAuthors: allAuthors.concat(response.data.addBook.author),
-        };
-      });
-    },
+  const [createBook] = useMutation(CREATE_BOOK, {
     onError: (error) => {
       console.error('Error adding book:', error.message);
     },
+    update: (cache, { data: { addBook } }) => {
+      updateCache(cache, { query: ALL_AUTHORS }, addBook);
+      updateCache(cache, { query: ALL_BOOKS }, addBook);
+    },
+     refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
   });
+
+ 
+  // const [createBook] = useMutation(CREATE_BOOK, {
+  //   update: (cache, response) => {
+
+  //     cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
+  //       return {
+  //         allBooks: allBooks.concat(response.data.addBook),
+  //       };
+  //     });
+  //     cache.updateQuery({ query: ALL_AUTHORS }, ({ allAuthors }) => {
+  //       return {
+  //         allAuthors: allAuthors.concat(response.data.addBook.author),
+  //       };
+  //     });
+  //   },
+  //   onError: (error) => {
+  //     console.error('Error adding book:', error.message);
+  //   },
+  // });
 
 
 
