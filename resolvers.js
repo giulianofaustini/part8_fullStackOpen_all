@@ -1,3 +1,6 @@
+
+const { PubSub } = require('graphql-subscriptions')
+const pubsub = new PubSub()
 const { GraphQLError } = require('graphql')
 const jwt = require("jsonwebtoken");
 const Author = require("./models/Author");
@@ -190,6 +193,8 @@ const resolvers = {
           }
           await book.save();
           const populatedBook = await Book.findById(book.id).populate('author');
+
+          pubsub.publish('BOOK_ADDED', { bookAdded: populatedBook })
   
           return populatedBook;
         } catch (error) {
@@ -208,8 +213,12 @@ const resolvers = {
                 error: error.message,
               },
             });
+            
           }
+
+          
         }
+     
       },
   
       editAuthor: async (root, args) => {
@@ -243,6 +252,13 @@ const resolvers = {
         }
       },
     },
+
+    Subscription: {
+        bookAdded: {
+          subscribe: () => pubsub.asyncIterator('BOOK_ADDED')
+        },
+      },
+    
   };
 
     module.exports = resolvers;

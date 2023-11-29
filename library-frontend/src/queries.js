@@ -8,6 +8,20 @@ mutation login ($username: String!, $password: String!) {
 }
 `
 
+export const BOOK_ADDED = gql`
+fragment BookDetails on Book {
+    title
+    published
+    author {
+        name
+    }
+    published
+    genres
+    id
+}
+`
+
+
 export const ALL_BOOKS = gql`
   query {
     allBooks {
