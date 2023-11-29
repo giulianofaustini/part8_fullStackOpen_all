@@ -9,10 +9,11 @@ const Books = ({ books }) => {
 
 
   const booksInGenreQuery = useQuery( BOOKS_IN_GENRE, {
+    skip: selectedGenre === null,
     onError: (error) => {
       console.error('Error fetching books in genre query', error.message)
     },
-    variables: { genre: selectedGenre },
+    variables: { genre : selectedGenre},
   })
 
 

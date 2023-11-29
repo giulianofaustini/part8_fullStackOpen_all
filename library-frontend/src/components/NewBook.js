@@ -11,12 +11,33 @@ export const NewBook = (props) => {
   const [genres, setGenres] = useState([])
 
   
-  const [createBook] = useMutation(CREATE_BOOK, {
-    refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
-  })
-
  
-
+    const [createBook] = useMutation(CREATE_BOOK, {
+      update: (cache, { data: { addBook } }) => {
+        const allBooksData = cache.readQuery({ query: ALL_BOOKS });
+        cache.writeQuery({
+          query: ALL_BOOKS,
+          data: {
+            allBooks: [...allBooksData.allBooks, addBook],
+          },
+        });
+        const allAuthorsData = cache.readQuery({ query: ALL_AUTHORS });
+        const newAuthor = addBook.author;
+        const authorExists = allAuthorsData.allAuthors.some(
+          (author) => author.id === newAuthor.id
+        );
+    
+        if (!authorExists) {
+          cache.writeQuery({
+            query: ALL_AUTHORS,
+            data: {
+              allAuthors: [...allAuthorsData.allAuthors, newAuthor],
+            },
+          });
+        }
+      },
+    });
+  
   const submit = async (event) => {
     event.preventDefault();
   
