@@ -223,6 +223,62 @@ const resolvers = {
           }
         }
       },
+
+      addSummary: async (root, args, context) => {
+        const book = await Book.findById(args.id);
+        const currentUser = context.currentUser;
+        if (!currentUser) {
+          throw new GraphQLError("Not authenticated", {
+            extensions: {
+              code: "UNAUTHENTICATED",
+            },
+          });
+        }
+        if (!book) {
+          throw new GraphQLError("Book not found", {
+            extensions: {
+              code: "NOT_FOUND",
+            },
+          });
+        }
+
+        if (!args.summary) {
+          throw new GraphQLError("Summary cannot be empty", {
+            extensions: {
+              code: "BAD_USER_INPUT",
+            },
+          });
+        }
+
+        book.summary = args.summary;
+        const updatedBook = await book.save();
+        const populatedBook = await Book.findById(updatedBook.id).populate('author');
+
+        try { 
+
+         await populatedBook.save();
+
+
+          return populatedBook;
+        } catch (error) {
+          if (error.name === "ValidationError") {
+            throw new GraphQLError("Book validation failed", {
+              extensions: {
+                code: "BAD_USER_INPUT",
+                invalidArgs: args,
+                validationErrors: error.errors,
+              },
+            });
+          } else {
+            throw new GraphQLError("Book failed to save", {
+              extensions: {
+                code: "INTERNAL_SERVER_ERROR",
+                error: error.message,
+              },
+            });
+          }
+        }
+      },
   
       editAuthor: async (root, args) => {
         const author = await Author.findOne({ name: args.name });

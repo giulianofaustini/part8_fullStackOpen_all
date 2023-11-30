@@ -108,6 +108,24 @@ mutation editAuthor($name: String!, $born: Int! ) {
 }
 `
 
+export const ADD_SUMMARY = gql`
+mutation addSummary($id: ID!, $summary: String!) {
+    addSummary(id: $id, summary: $summary) {
+        title
+        author {
+          name
+          born
+          id
+        }
+        published
+        genres
+        summary
+        id
+    }
+}
+`
+
+
 export const USER = gql`
 query {
     me {

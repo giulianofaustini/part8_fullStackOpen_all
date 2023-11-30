@@ -33,7 +33,7 @@ type Query {
     me: User
   }
   type Mutation {
-    createUser(
+     createUser(
       username: String!
       favoriteGenre: String!
     ): User
@@ -50,7 +50,8 @@ type Query {
       genres: [String!]!
       summary: String
     ): Book!
-    
+
+  
     addAuthor(
       name: String!
     ): Author
@@ -59,6 +60,12 @@ type Query {
       name: String!
       setBornTo: Int!
     ): Author
+
+    addSummary(
+      summary: String
+      id: ID!
+    ): Book
+
   }
   type Subscription {
     bookAdded: Book!
