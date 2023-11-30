@@ -39,8 +39,7 @@ export const BookDetail = () => {
 
     try {
       if(newSummary === '') {
-        alert('Summary cannot be empty');
-        throw new Error('Summary cannot be empty');
+        setNewSummary('No summary')
       }
 
       const response = await addSummary({
@@ -65,15 +64,15 @@ export const BookDetail = () => {
       <div>Title: {book.title}</div>
       <div>Published: {book.published}</div>
       <div>Author: {book.author.name}</div>
-      {book.summary === null ? (
+      {book.summary === "No summary" ? (
         <div>
           <input
             type="text"
             value={newSummary}
-            placeholder="Add a summary"
+            placeholder="No summary"
             onChange={(e) => setNewSummary(e.target.value)}
           />{' '}
-          <button onClick={handleAddSummary}>Add Summary</button>
+          <button onClick={handleAddSummary}>Add a Summary</button>
         </div>
       ) : (
         <div>

@@ -4,7 +4,7 @@ import { CREATE_BOOK, ALL_BOOKS, ALL_AUTHORS } from '../queries'
 import { updateCache } from '../App'
 
 
-export const NewBook = (props) => {
+export const NewBook = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [published, setPublished] = useState('')
@@ -18,6 +18,8 @@ export const NewBook = (props) => {
   const [createBook] = useMutation(CREATE_BOOK, {
     onError: (error) => {
       console.error('Error adding book:', error.message);
+    console.error('Detailed error:', error.graphQLErrors);
+    console.error('Network error:', error.networkError);;
     },
     update: (cache, { data }) => {
       console.log('data in the create book use mutatino in new book',data);
@@ -33,6 +35,10 @@ export const NewBook = (props) => {
     event.preventDefault();
   
     const publishedNumber = parseInt(published, 10);
+
+    if(summary === '') {
+      setSummary('No summary')
+    }
   
     try {
       await createBook({
@@ -41,7 +47,7 @@ export const NewBook = (props) => {
           author,
           published: publishedNumber,
           genres,
-          summary,
+          summary: summary === '' ? 'No summary' : summary,
         },
       });
     } catch (error) {
