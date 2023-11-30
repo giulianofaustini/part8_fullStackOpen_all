@@ -38,19 +38,18 @@ const Books = ({ books }) => {
 
   return (
     <div>
-      <h2>Books</h2>
-      <div>
+      <div className='grid grid-cols-5 gap-2  border-b-8  '>
         {newGenres.map((genre) => (
-          <button key={genre} onClick={() => handleGenreClick(genre)}>
+          <button className='bg-white rounded-tl-lg transition delay-150 duration-300 ease-in-out hover:scale-125 border border-bg-gray-100' key={genre} onClick={() => handleGenreClick(genre)}>
             {genre}
           </button>
         ))}
         <div>
-          <button onClick={() => setSelectedGenre(null)}>Show All</button>
+          <button className='bg-white ' onClick={() => setSelectedGenre(null)}>Show All</button>
         </div>
       </div>
 
-      <ul style={{ listStyleType: 'none' }}>
+      <ul class="mt-5 list-none grid grid-cols-3 gap-4 justify-evenly">
         {filteredBooks.map((b) => (
           <li key={b.title}>
             {b.title} by {b.author.name}

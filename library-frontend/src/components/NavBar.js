@@ -13,12 +13,15 @@ export const NavBar = ({setToken}) => {
   }
 
   return (
-    <div  className="h-10 my-5 flex space-x-10 justify-center">
+    <div  className="h-10 my-5 flex space-x-16 justify-center container mx-auto ">
       <Link to={"/"}>Author</Link>
       <Link to={"/Books"}>Books</Link>
       <Link to={"/Add_Books"}>Add Books</Link>
-      <Link to={"/Recommended"}>Recommended</Link>
+      <Link to={"/Recommended"}>Recommended for you</Link>
       <button className='flex transition delay-150 duration-300 ease-in-out hover:scale-125  text-black' onClick={logout}>logout</button>
     </div>
   );
 };
+
+
+// 
