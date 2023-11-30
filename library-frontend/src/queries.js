@@ -20,8 +20,8 @@ fragment BookDetails on Book {
     author {
         name
     }
-    published
     genres
+    summary
     id
 }
 `
@@ -39,6 +39,7 @@ export const ALL_BOOKS = gql`
       }
       id
       genres
+      summary
     }
   }
 `;
@@ -56,12 +57,13 @@ export const ALL_AUTHORS = gql`
 
 
 export const CREATE_BOOK = gql`
-mutation createBook($title: String!, $author: String!, $genres: [String!]!, $published: Int) {
+mutation createBook($title: String!, $author: String!, $genres: [String!]!, $published: Int, $summary: String) {
     addBook(
         title: $title,
         author: $author,
         published: $published,
         genres: $genres
+        summary: $summary
     ) {
         title
         author {
@@ -71,6 +73,7 @@ mutation createBook($title: String!, $author: String!, $genres: [String!]!, $pub
         }
         published
         genres
+        summary
         id
     }
 }
@@ -106,3 +109,4 @@ export const BOOKS_IN_GENRE = gql`
     }
   }
 `;
+

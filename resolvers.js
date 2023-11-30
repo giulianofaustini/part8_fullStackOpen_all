@@ -182,7 +182,7 @@ const resolvers = {
         }
   
         try {
-          const book = new Book({ ...args, author: author.id });
+          const book = new Book({ ...args, author: author.id, summary: args.summary });
           const currentUser = context.currentUser;
           if (!currentUser) {
             throw new GraphQLError("Not authenticated", {
@@ -213,12 +213,8 @@ const resolvers = {
                 error: error.message,
               },
             });
-            
           }
-
-          
         }
-     
       },
   
       editAuthor: async (root, args) => {

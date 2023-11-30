@@ -15,6 +15,7 @@ type Book {
     author: Author!
     id: ID!
     genres: [String!]!
+    summary: String
   }
   type Author {
     name: String!
@@ -46,6 +47,7 @@ type Query {
       published: Int
       author: String!
       genres: [String!]!
+      summary: String
     ): Book!
     
     addAuthor(
@@ -64,3 +66,4 @@ type Query {
 `
 
 module.exports = typeDefs
+

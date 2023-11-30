@@ -10,6 +10,8 @@ export const NewBook = (props) => {
   const [published, setPublished] = useState('')
   const [genre, setGenre] = useState('')
   const [genres, setGenres] = useState([])
+  const [summary, setSummary] = useState('')
+
 
   
 
@@ -26,62 +28,6 @@ export const NewBook = (props) => {
     },
   
   });
-    //  refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
-
-
- 
-  // const [createBook] = useMutation(CREATE_BOOK, {
-  //   update: (cache, response) => {
-
-  //     cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
-  //       return {
-  //         allBooks: allBooks.concat(response.data.addBook),
-  //       };
-  //     });
-  //     cache.updateQuery({ query: ALL_AUTHORS }, ({ allAuthors }) => {
-  //       return {
-  //         allAuthors: allAuthors.concat(response.data.addBook.author),
-  //       };
-  //     });
-  //   },
-  //   onError: (error) => {
-  //     console.error('Error adding book:', error.message);
-  //   },
-  // });
-
-
-
-
-
-
-    //   update: (cache, { data: { addBook } }) => {
-    //     const allBooksData = cache.readQuery({ query: ALL_BOOKS });
-    //     cache.writeQuery({
-    //       query: ALL_BOOKS,
-    //       data: {
-    //         allBooks: [...allBooksData.allBooks, addBook],
-    //       },
-    //     });
-    //     const allAuthorsData = cache.readQuery({ query: ALL_AUTHORS });
-    //     const newAuthor = addBook.author;
-    //     const authorExists = allAuthorsData.allAuthors.some(
-    //       (author) => author.id === newAuthor.id
-    //     );
-    
-    //     if (!authorExists) {
-    //       cache.writeQuery({
-    //         query: ALL_AUTHORS,
-    //         data: {
-    //           allAuthors: [...allAuthorsData.allAuthors, newAuthor],
-    //         },
-    //       });
-    //     }
-    //   },
-    // });
-  
-
- // refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
- 
 
   const submit = async (event) => {
     event.preventDefault();
@@ -95,23 +41,19 @@ export const NewBook = (props) => {
           author,
           published: publishedNumber,
           genres,
+          summary,
         },
       });
     } catch (error) {
       console.error('Error adding book:', error.message);
     }
   
-      // const newBook = data.addBook;
-  
-     
-      // props.updateCacheWith(newBook);
-    
-  
     setTitle('');
     setPublished('');
     setAuthor('');
     setGenres([]);
     setGenre('');
+    setSummary('');
   };
   
 
@@ -155,6 +97,15 @@ export const NewBook = (props) => {
           </button>
         </div>
         <div>genres: {genres.join(' ')}</div>
+        <div>
+          summary
+          <input
+          type='text'
+            value={summary}
+            onChange={({ target }) => setSummary(target.value)}
+          />
+        </div>
+        <br></br>
         <button type="submit">create book</button>
       </form>
     </div>

@@ -19,7 +19,11 @@ const schema = new mongoose.Schema({
   },
   genres: [
     { type: String}
-  ]
+  ],
+  summary: {
+    type: String,
+    minlength: 10
+  }
 })
 
 schema.plugin(uniqueValidator)

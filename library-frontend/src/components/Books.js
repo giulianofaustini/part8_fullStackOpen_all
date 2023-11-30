@@ -49,7 +49,7 @@ const Books = ({ books }) => {
         </div>
       </div>
 
-      <ul class="mt-5 list-none grid grid-cols-3 gap-4 justify-evenly">
+      <ul className="mt-5 list-none grid grid-cols-3 gap-4 justify-evenly">
         {filteredBooks.map((b) => (
           <li key={b.title}>
             {b.title} by {b.author.name}
