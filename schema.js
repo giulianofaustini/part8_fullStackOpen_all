@@ -20,6 +20,7 @@ type Book {
   type Author {
     name: String!
     bookCount: Int
+    books: [Book]
     id: ID!
     born: Int
   }
@@ -30,6 +31,7 @@ type Query {
     allAuthors: [Author!]!
     booksInGenre(genres: [String]): [Book!]!
     oneBook(id: ID!): Book!
+    oneAuthor(id: ID!): Author!
     me: User
   }
   type Mutation {

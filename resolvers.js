@@ -16,6 +16,11 @@ const resolvers = {
         return book;
       },
 
+      oneAuthor: async (root, args) => {
+        const author = await Author.findById(args.id).populate("books");
+        return author;
+      },
+
 
       bookCount: async () => Book.collection.countDocuments(),
   

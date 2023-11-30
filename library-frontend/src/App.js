@@ -12,6 +12,7 @@ import { ALL_AUTHORS } from './queries'
 import { useQuery , useApolloClient , useSubscription } from '@apollo/client'
 import { Recommended } from './components/Recommended';
 import { BookDetail } from './components/BookDetail';
+import { AuthorDetail } from './components/AuthorDetail';
 
 
 export const updateCache = (cache, query, addedBook) => {
@@ -106,6 +107,7 @@ const App = () => {
             <Route path="/Add_Books" element={<NewBook />} />
             <Route path="/Recommended" element={<Recommended  books={allBooks} />} />
             <Route path="/bookDetail/:id" element={<BookDetail />} />
+            <Route path="/authorDetail/:id" element={<AuthorDetail />} />
 
           </Routes>
         )}
