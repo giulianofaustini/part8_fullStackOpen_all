@@ -155,7 +155,7 @@ const resolvers = {
             }
           );
         }
-        let author = await Author.findOne({ name: args.author });
+       
         const currentUser = context.currentUser;
         if (!currentUser) {
           throw new GraphQLError("Not authenticated", {
@@ -164,6 +164,7 @@ const resolvers = {
             },
           });
         }
+        let author = await Author.findOne({ name: args.author });
         if (!author) {
           author = new Author({ name: args.author });
           try {
@@ -199,6 +200,10 @@ const resolvers = {
             });
           }
           await book.save();
+
+          author.books.push(book.id);
+          await author.save();
+      
           const populatedBook = await Book.findById(book.id).populate('author');
 
           pubsub.publish('BOOK_ADDED', { bookAdded: populatedBook })
