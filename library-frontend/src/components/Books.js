@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BOOKS_IN_GENRE } from '../queries'
 import { useQuery } from '@apollo/client';
+import { Link } from 'react-router-dom';
 
 
 const Books = ({ books }) => {
@@ -52,7 +53,7 @@ const Books = ({ books }) => {
       <ul className="mt-5 list-none grid grid-cols-3 gap-4 justify-evenly">
         {filteredBooks.map((b) => (
           <li key={b.title}>
-            {b.title} by {b.author.name}
+            <Link to={`/bookDetail/${b.id}`}> {b.title} </Link>
           </li>
         ))}
       </ul>

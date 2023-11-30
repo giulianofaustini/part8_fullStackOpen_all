@@ -29,6 +29,7 @@ type Query {
     authorCount: Int!
     allAuthors: [Author!]!
     booksInGenre(genres: [String]): [Book!]!
+    oneBook(id: ID!): Book!
     me: User
   }
   type Mutation {

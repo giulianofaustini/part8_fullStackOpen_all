@@ -10,6 +10,13 @@ const User = require("./models/User");
 
 const resolvers = {
     Query: {
+
+      oneBook: async (root, args) => {
+        const book = await Book.findById(args.id).populate("author");
+        return book;
+      },
+
+
       bookCount: async () => Book.collection.countDocuments(),
   
       booksInGenre: async (root, args) => {

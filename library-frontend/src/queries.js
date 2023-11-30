@@ -44,6 +44,24 @@ export const ALL_BOOKS = gql`
   }
 `;
 
+export const ONE_BOOK = gql`
+  query oneBook($id: ID!) {
+    oneBook(id: $id) {
+      title
+      published
+      author {
+        name
+        born
+        id
+      }
+      id
+      genres
+      summary
+    }
+  }
+`;  
+
+
 export const ALL_AUTHORS = gql`
   query {
     allAuthors {

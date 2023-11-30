@@ -24,7 +24,7 @@ export const Recommended = ({ books }) => {
     <div>
       <h1>Your fav genre: {favoriteGenre}</h1>
       <h3>Books in your favorite genre:</h3>
-      {booksInFavoriteGenre} by {booksInGenreQuery.data && booksInGenreQuery.data.allBooks[0].author.name}
+      {booksInFavoriteGenre}
     </div>
   );
 };
