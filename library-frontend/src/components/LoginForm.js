@@ -38,10 +38,10 @@ export const LoginForm = ({ setToken }) => {
   };
 
   return (
-    <div>
+    <div className="flex justify-center mt-12">
       <form onSubmit={handleSubmitForm}>
         <div>
-          <div>
+          <div className="mt-5 rounded-md border-2 border-red-100 rounded-full  ">
             <input
             placeholder="Julian or Noora"
               type="text"
@@ -49,7 +49,7 @@ export const LoginForm = ({ setToken }) => {
               onChange={({ target }) => setUsername(target.value)}
             />
           </div>
-          <div>
+          <div className="mt-2 rounded-md border-2 border-red-100 rounded-full ">
             <input
             placeholder="secret"
               type="password"
@@ -57,7 +57,7 @@ export const LoginForm = ({ setToken }) => {
               onChange={({ target }) => setPassword(target.value)}
             />
           </div>
-          <button type="submit"> LOGIN </button>
+          <button className="text-red-100 hover:text-red-300" type="submit"> LOGIN </button>
         </div>
       </form>
     </div>

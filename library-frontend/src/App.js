@@ -82,7 +82,6 @@ const App = () => {
   if (!token) {
     return (
       <div>
-        <h2>Login</h2>
         <LoginForm
           setToken={setToken}
         />
