@@ -51,44 +51,49 @@ export const AuthorDetail = () => {
   };
 
   return (
-      <div className="bg-black text-white flex-cols justify-center ">
-        <div>
+      <div className="flex-cols justify-stretch">
+        <div className="flex justify-center">
           <h1>{author.name}</h1>
         </div>
-        <div>
-          <h1>Born in {author.born}</h1>
+        <div className="flex justify-center  mt-4">
+          <h1>Born: {author.born}</h1>
         </div>
-        <div>
-          <h1>Nationality {author.nationality}</h1>
+        <div className="flex justify-center mt-4">
+          <h1>Nationality: {author.nationality}</h1>
         </div>
-        <div>
+        <div className="flex justify-center mt-4">
             Authored books:
         </div>
-        <div>
+        <div className="flex justify-center mt-4" >
           {author.books.map((book) => (
             <li key={book.title}>{book.title}</li>
           ))}
       </div>
-      <h2>Set birthyear</h2>
       <form onSubmit={submit}>
-        <div>
-          Born in: {" "}
+        <div className="flex justify-center mt-4" >
+         
           <input
             value={born}
             onChange={(event) => setBorn(event.target.value)}
+            placeholder="        Do you know when the author was born? --> Enter the year here"
+            className="w-1/2 bg-white  border border-bg-gray-100 placeholder:italic placeholder:opacity-50 "
           />
         </div>
-        <div>
-          Nationality:{" "}
+        <div className="flex justify-center mt-4">
+        
           <input
             value={nationality}
             onChange={(event) => setNationality(event.target.value)}
+            placeholder="           Do you know the author's nationality? --> Enter it here"
+            className="w-1/2 bg-white rounded-tl-lg border border-bg-gray-100 placeholder:italic placeholder:opacity-50 "
           />
         </div>
+        <div className="flex justify-center mt-4 " > <button  type="submit"> UPDATE</button></div>
+        <div className="flex justify-center mt-4"> <button  onClick={navigateToHome}>BACK</button> </div>
 
-        <button type="submit">Update author</button>
+       
       </form>
-      <button onClick={navigateToHome}>BACK</button>
+      
    
     </div>
   );
