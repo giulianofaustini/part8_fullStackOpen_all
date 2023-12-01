@@ -60,26 +60,28 @@ export const BookDetail = () => {
   console.log('This is the book in BookDetail component', book);
 
   return (
-    <div>
-      <div>Title: {book.title}</div>
-      <div>Published: {book.published}</div>
-      <div>Author: {book.author.name}</div>
+    <div className="flex-cols justify-stretch">
+      <div className="flex justify-center mt-4">Title: {book.title}</div>
+      <div className="flex justify-center mt-4">Published: {book.published}</div>
+      <div className="flex justify-center mt-4">Author: {book.author.name}</div>
       {book.summary === "No summary" || " " ? (
-        <div>
+        <div className="flex justify-center mt-4">
           <input
             type="text"
             value={newSummary}
-            placeholder="No summary"
+            placeholder="No summary. Add one."
             onChange={(e) => setNewSummary(e.target.value)}
+            
           />{' '}
-          <button onClick={handleAddSummary}>Add a Summary</button>
+          <button onClick={handleAddSummary}> Add a Summary </button>
+          
         </div>
       ) : (
-        <div>
+        <div className="flex justify-center mt-4">
           <div>Summary: {book.summary}</div>
         </div>
       )}
-      <div>
+      <div className="flex justify-center mt-4"> 
         <button onClick={navigateToBooks}>Back to Books</button>
       </div>
     </div>
