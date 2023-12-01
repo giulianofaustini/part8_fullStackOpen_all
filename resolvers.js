@@ -291,35 +291,58 @@ const resolvers = {
       },
   
       editAuthor: async (root, args) => {
-        const author = await Author.findOne({ name: args.name });
-  
-        if (!author) {
-          return null;
-        }
-  
         try {
-          author.born = args.setBornTo;
-          await author.save();
-          return author;
-        } catch (error) {
-          if (error.name === "ValidationError") {
-            throw new GraphQLError("Author validation failed", {
+          let author = await Author.findOne({ name: args.name });
+
+          if (args.setBornTo || args.setNationalityTo) {
+            author = await Author.findOne({ name: args.name });
+      
+          if (!author) {
+            throw new GraphQLError("Author not found", {
               extensions: {
                 code: "BAD_USER_INPUT",
                 invalidArgs: args,
-                validationErrors: error.errors,
-              },
-            });
-          } else {
-            throw new GraphQLError("Saving author failed", {
-              extensions: {
-                code: "INTERNAL_SERVER_ERROR",
-                error: error.message,
               },
             });
           }
         }
-      },
+
+        args.setBornTo ? author.born = args.setBornTo : author.born = author.born;
+        args.setNationalityTo ? author.nationality : author.nationality = author.nationality
+
+        
+    if (args.setBornTo) {
+      author.born = args.setBornTo;
+      await author.save();
+
+    }
+
+    if (args.setNationalityTo) {
+      author.nationality = args.setNationalityTo;
+      await author.save();
+    }
+
+    author = await author.save();
+    return author;
+  } catch (error) {
+    if (error.name === "ValidationError") {
+      throw new GraphQLError("Author validation failed", {
+        extensions: {
+          code: "BAD_USER_INPUT",
+          invalidArgs: args,
+          validationErrors: error.errors,
+        },
+      });
+    } else {
+      throw new GraphQLError("Saving author failed", {
+        extensions: {
+          code: "INTERNAL_SERVER_ERROR",
+          error: error.message,
+        },
+      });
+    }
+  }
+}
     },
 
     Subscription: {

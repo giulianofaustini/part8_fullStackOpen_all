@@ -12,6 +12,9 @@ const schema = new mongoose.Schema({
   born: {
     type: Number,
   },
+  nationality: {
+    type: String,
+  },
   books: [
     {
       type: mongoose.Schema.Types.ObjectId,

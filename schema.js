@@ -23,6 +23,7 @@ type Book {
     books: [Book]
     id: ID!
     born: Int
+    nationality: String
   }
 type Query {
     bookCount: Int!
@@ -60,7 +61,8 @@ type Query {
   
     editAuthor(
       name: String!
-      setBornTo: Int!
+      setBornTo: Int
+      setNationalityTo: String
     ): Author
 
     addSummary(

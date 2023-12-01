@@ -64,7 +64,7 @@ export const BookDetail = () => {
       <div>Title: {book.title}</div>
       <div>Published: {book.published}</div>
       <div>Author: {book.author.name}</div>
-      {book.summary === "No summary" ? (
+      {book.summary === "No summary" || " " ? (
         <div>
           <input
             type="text"

@@ -14,6 +14,7 @@ export const AuthorDetail = () => {
   };
 
   const [born, setBorn] = useState("");
+  const [nationality, setNationality] = useState("");
 
   const [editAuthor] = useMutation(EDIT_AUTHOR, {
     refetchQueries: [{ query: ALL_AUTHORS }],
@@ -37,22 +38,31 @@ export const AuthorDetail = () => {
     event.preventDefault();
 
     const bornNumber = parseInt(born, 10);
+    
+
+    // console.log("bornNumber", bornNumber);
+    // console.log("nationalityIs", nationality);
+
     editAuthor({
-      variables: { name: author.name, born: bornNumber },
+      variables: { name: author.name, born: bornNumber , nationality: nationality},
     });
     setBorn("");
+    setNationality("");
   };
 
   return (
-      <div>
+      <div className="bg-black text-white flex-cols justify-center ">
         <div>
           <h1>{author.name}</h1>
         </div>
         <div>
-          <h1>born in {author.born}</h1>
+          <h1>Born in {author.born}</h1>
         </div>
         <div>
-            authored books:
+          <h1>Nationality {author.nationality}</h1>
+        </div>
+        <div>
+            Authored books:
         </div>
         <div>
           {author.books.map((book) => (
@@ -62,16 +72,24 @@ export const AuthorDetail = () => {
       <h2>Set birthyear</h2>
       <form onSubmit={submit}>
         <div>
-          Born:{" "}
+          Born in: {" "}
           <input
             value={born}
             onChange={(event) => setBorn(event.target.value)}
+          />
+        </div>
+        <div>
+          Nationality:{" "}
+          <input
+            value={nationality}
+            onChange={(event) => setNationality(event.target.value)}
           />
         </div>
 
         <button type="submit">Update author</button>
       </form>
       <button onClick={navigateToHome}>BACK</button>
+   
     </div>
   );
 };
