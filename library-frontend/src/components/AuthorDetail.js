@@ -76,7 +76,7 @@ export const AuthorDetail = () => {
             value={born}
             onChange={(event) => setBorn(event.target.value)}
             placeholder="        Do you know when the author was born? --> Enter the year here"
-            className="w-1/2 bg-white  border border-bg-gray-100 placeholder:italic placeholder:opacity-50 "
+            className="w-1/2 bg-white rounded-tl-lg border border-bg-gray-100 placeholder:italic placeholder:opacity-50 "
           />
         </div>
         <div className="flex justify-center mt-4">

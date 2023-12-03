@@ -69,51 +69,64 @@ export const NewBook = () => {
   }
 
   return (
-    <div >
-      <form onSubmit={submit}>
-        <div>
-          title
+    <div className="container flex justify-center ml-20">
+    <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6" >
+      <form   onSubmit={submit}>
+        <div className="mt-4 block w-full rounded-md border-0 p-5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 placeholder:italic placeholder:opacity-50 ">
+         { }
           <input
             value={title}
             onChange={({ target }) => setTitle(target.value)}
+            placeholder='title'
+            className='bg-red-50'
           />
         </div>
-        <div>
-          author
+        <div className="mt-4 block w-full rounded-md border-0 p-5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 placeholder:italic placeholder:opacity-50">
+         
           <input
             value={author}
             onChange={({ target }) => setAuthor(target.value)}
+            placeholder='author'
+            className='bg-red-50'
           />
         </div>
-        <div>
-          published
+        <div className="mt-4 block w-full rounded-md border-0 p-5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 placeholder:italic placeholder:opacity-50">
+         
           <input
           type='number'
             value={published}
             onChange={({ target }) => setPublished(target.value)}
+            placeholder='published'
+            className='bg-red-50'
           />
         </div>
-        <div>
+        <div className="mt-4 block w-full rounded-md border-0 p-5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 placeholder:italic placeholder:opacity-50">
+          
           <input
             value={genre}
             onChange={({ target }) => setGenre(target.value)}
+            placeholder='genre'
+            className='bg-red-50'
           />
-          <button onClick={addGenre} type="button">
-            add genre
+          <button className='bg-red-100 rounded-tl-lg  border border-bg-gray-100' onClick={addGenre} type="button">
+            {} add the genre{ }
           </button>
         </div>
-        <div>genres: {genres.join(' ')}</div>
-        <div>
-          summary
-          <input
+        <div className="mt-4 block w-full b-red-100rounded-md border-0 p-5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 placeholder:italic placeholder:opacity-50">{genres.join(' ')}</div>
+        <div className=" mt-4 block w-full rounded-md border-0 p-5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 placeholder:italic placeholder:opacity-50">
+          
+          <textarea
           type='text'
             value={summary}
             onChange={({ target }) => setSummary(target.value)}
-          />
+            placeholder='summary'
+            className='bg-red-50'
+          /> 
         </div>
         <br></br>
-        <button type="submit">create book</button>
+        <button type="submit">CREATE BOOK</button>
       </form>
+    </div>
     </div>
   )
 }
